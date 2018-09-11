@@ -1,5 +1,5 @@
 import edu.illinois.cs.cs125.lib.mazemaker.Maze;
-
+import java.util.Random;
 /**
  * Solve a randomly-generated maze.
  *
@@ -33,28 +33,56 @@ public class SolveMaze {
          * You should be able to solve a 10 x 10 maze in (far fewer than) 1000 steps.
          * Feel free to adjust this number if you experiment with other mazes.
          */
-        for (int step = 0; step < 1000; step++) {
+        int moves = 0;
+        Random rn = new Random();
+        for (int step = 0; step < 100000000; step++) {
             while (!maze.isFinished()) {
+                if (maze.canMove()) {
+                    maze.move();
+                    moves += 1;
+                } else {
+                    while (true) {
+                        int decision =  rn.nextInt(1);
+                        if (decision == 0) {
+                            maze.turnRight();
+                        } else {
+                            maze.turnLeft();
+                        }
+                        if (maze.canMove()) {
+                            maze.move();
+                            moves += 1;
+                            break;
+                        } else {
+                            continue;
+                        }
+                    }
+                }
+            }
+            /*while (!maze.isFinished()) {
                 maze.turnLeft();
                 if (maze.canMove()) {
                     maze.move();
+                    moves += 1;
                 } else {
                     while (true) {
                         maze.turnRight();
                         if (maze.canMove()) {
                             maze.move();
+                            moves += 1;
                             break;
                         }
                     }
-                }
+                } */
+                /*
                 try {
                     Thread.sleep(4000);
                     System.out.println(maze);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
-            }
+                */
         }
+        System.out.println(moves);
         if (maze.isFinished()) {
             System.out.println("You solved the maze!");
         } else {
